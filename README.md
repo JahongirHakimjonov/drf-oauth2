@@ -69,27 +69,68 @@ SOCIAL_AUTH_CONFIG = {
 
 ### Endpoints
 
-- `POST /auth/social/` - Authenticate with a social provider.
-- `GET /auth/providers/` - List available OAuth2 providers.
+- `POST /auth/social/register/` - Authenticate with a social provider.
+- `GET /auth/social/list/` - List available OAuth2 providers.
 
 ### Example Request
 
 #### Authenticate with a social provider
 
 ```http
-POST /auth/social/
+GET /auth/social/register/
 Content-Type: application/json
 
+Request body:
+{
+    "provider": "google"
+}
+
+Response body:
+{
+    "success": true,
+    "message": "Redirecting to provider",
+    "data": {
+        "url": "https://github.com/login/oauth/authorize?client_id=CLIENTID&redirect_uri=http://localhost:3001/auth/github/redirect/&scope=user:email"
+    }
+}
+```
+
+```http
+POST /auth/social/register/
+Content-Type: application/json
+
+Request body:
 {
     "provider": "google",
     "code": "authorization-code"
+}
+
+Response body:
+{
+    "success": true,
+    "message": "Authentication successful",
+    "data": {
+        "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczODI0MTc0MCwiaWF0IjoxNzM4MTU1MzQwLCJqdGkiOiJiNzU3NWQzNzM1MTg0NDIxYmUzZWVjNmUxZmQwZGJkZiIsInVzZXJfaWQiOjJ9.ZaOaoYgXdaoyyPNWHnywkd97kVA6NwGHTLL2BnIrhQA",
+        "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4MTU1NjQwLCJpYXQiOjE3MzgxNTUzNDAsImp0aSI6IjUzNzBhODQ4MDk4MzRmMzA5ZjdiZmE0ODgzNzFiZGI1IiwidXNlcl9pZCI6Mn0.4CimC7CL25EFeZyiWVTgqSE-KxTsnnjl_CXSCmPDITc",
+        "user": 2,
+        "expired_at": "2025-02-28T12:55:40.058390Z"
+    }
 }
 ```
 
 #### List available providers
 
 ```http
-GET /auth/providers/
+GET /auth/social/list/
+
+Response body:
+{
+    "success": true,
+    "message": "Available providers",
+    "data": [
+        "github"
+    ]
+}
 ```
 
 ## Development
